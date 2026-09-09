@@ -1,0 +1,2 @@
+# inference/mic_demo.py 專用
+sounddevice>=0.4

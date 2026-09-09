@@ -1,0 +1,12 @@
+# 主 pipeline（生成 + 訓練 + 離線推論）
+numpy
+tensorflow>=2.16      # 需要 Keras 3（best.keras、tf.lite INT8）
+librosa>=0.10
+soundfile>=0.12
+piper-tts>=1.8        # ⚠️ GPL-3.0，預設 TTS 後端（ONNX，904 語者，離線）；見 README.md 的「致謝與授權」
+pronouncing>=0.2      # 英文負樣本近音詞（內含 CMUdict）
+pypinyin>=0.50       # 中文喚醒詞：把部分片語轉拼音給 piper 合成負樣本
+
+# datasets/prepare.py 另需 `pip install -r datasets/requirements.txt`
+# edge-tts 後端（中文喚醒詞）另需 `pip install -r requirements-edge.txt`
+# 麥克風 demo 另需 `pip install -r requirements-mic.txt`

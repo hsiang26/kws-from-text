@@ -1,0 +1,103 @@
+{
+  "wake_word": "小幫手",
+  "label": "小幫手",
+  "model_mode": "lite",
+  "created": "2026-09-09T14:32:21",
+  "seed": 42,
+  "audio": {
+    "sample_rate": 44100,
+    "duration_sec": 1.0,
+    "samples": 44100,
+    "frame_step": 882,
+    "fft_length": 1024,
+    "num_mels": 40,
+    "num_mfcc": 10,
+    "mel_low_hz": 20.0,
+    "mel_high_hz": 8000.0
+  },
+  "input_norm": {
+    "mode": "peak",
+    "target": 0.9,
+    "floor": 0.001
+  },
+  "tflite_io": {
+    "input_shape": [
+      1,
+      49,
+      10,
+      1
+    ],
+    "input_scale": 0.0235294122248888,
+    "input_zero_point": -1,
+    "output_scale": 0.00390625,
+    "output_zero_point": -128
+  },
+  "positive_class_index": 1,
+  "suggested_threshold": 0.5,
+  "dataset_sampling": {
+    "train": {
+      "pos": {
+        "requested": 9600,
+        "available": 9600,
+        "used": 9600
+      },
+      "gsc": {
+        "requested": 1920,
+        "available": 51776,
+        "used": 1920
+      },
+      "near_miss": {
+        "requested": 2400,
+        "available": 4800,
+        "used": 2400
+      },
+      "generic": {
+        "requested": 2400,
+        "available": 8000,
+        "used": 2400
+      },
+      "fma": {
+        "requested": 960,
+        "available": 96,
+        "used": 96
+      },
+      "noise": {
+        "requested": 1920,
+        "available": 3200,
+        "used": 1920
+      }
+    },
+    "val": {
+      "pos": {
+        "requested": 1200,
+        "available": 1200,
+        "used": 1200
+      },
+      "gsc": {
+        "requested": 240,
+        "available": 6472,
+        "used": 240
+      },
+      "near_miss": {
+        "requested": 300,
+        "available": 600,
+        "used": 300
+      },
+      "generic": {
+        "requested": 300,
+        "available": 1000,
+        "used": 300
+      },
+      "fma": {
+        "requested": 120,
+        "available": 12,
+        "used": 12
+      },
+      "noise": {
+        "requested": 240,
+        "available": 400,
+        "used": 240
+      }
+    }
+  }
+}

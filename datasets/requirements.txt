@@ -1,0 +1,3 @@
+# datasets/prepare.py 專用（不是主 pipeline 需要的）
+# 主環境已有 numpy / scipy（librosa 相依）/ soundfile
+datasets>=2.14

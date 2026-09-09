@@ -1,0 +1,28 @@
+# virtualenv（使用者自己重建）
+venv/
+venv-psg/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 資料集 / 模型（第三方 / 體積大 —— 用 datasets/prepare.py 取得）
+datasets/speech_commands/
+datasets/music/
+datasets/noise/
+datasets/generic_speech/
+datasets/tts/
+datasets/_gsc_raw/
+datasets/_models/
+
+# 訓練產物（但保留附在 repo 裡的範例模型）
+models/*
+!models/examples/
+!models/examples/**
+
+# OS
+.DS_Store
+Thumbs.db
