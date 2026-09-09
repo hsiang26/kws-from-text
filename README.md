@@ -153,7 +153,8 @@ Microcontrollers*（Zhang et al. 2017, arXiv:1711.07128）：
 | 可訓練參數 | **22,530**（約 2.2 萬） |
 | 模型檔 | 全 INT8 量化 `.tflite`，**~47 KB**（BN 折進卷積後，權重本體約 21 KB） |
 | 執行期記憶體 | 常駐權重 ~21 KB ＋ 一塊 (25×5×64) INT8 activation buffer（~8 KB）；無動態配置 |
-| 輸入 | 單聲道 PCM，**44100 Hz**，**固定 1.0 秒**（44100 sample，不足補零、超過截斷） |
+| 輸入 | 單聲道 PCM，pipeline 內部走 **44100 Hz**、**固定 1.0 秒**（44100 sample，不足補零、超過截斷） |
+| 有效頻帶 | mel 濾波器組只涵蓋 **20–8000 Hz** → 麥克風只要取樣率 ≥ 16 kHz 就已包含模型需要的全部資訊 |
 | 特徵 | MFCC-10 → tensor **(49, 10, 1)**（20 ms hop、1024-pt FFT、40 mel、per-utterance CMVN） |
 | 輸出 | 2 類 softmax `[非喚醒詞, 喚醒詞]` |
 | 判定 | `喚醒詞分數 ≥ threshold`（預設 0.5，見〈門檻〉） |
@@ -167,7 +168,9 @@ Microcontrollers*（Zhang et al. 2017, arXiv:1711.07128）：
   最穩的是 **2–4 個中文字 / 1–3 個英文單字**；只有單一個音節則太短、線索不足、容易誤觸發。
 - **非語者相關**：不做聲紋 / 語者註冊，任何人講都會觸發（喚醒詞本來就該這樣，但也擋不掉刻意模仿）。
 - **不是語音辨識**：只回答「這 1 秒內有沒有出現這個詞」，不轉寫、不定位詞出現的時間點。
-- 輸入必須是 44100 Hz；收音裝置若是其他取樣率要先 resample（`inference/` 的工具會自動處理）。
+- 取樣率：pipeline 內部固定用 44100 Hz，但這不是收音需求 —— 模型只看 20–8000 Hz，所以 16 kHz
+  的麥克風（Nyquist 8 kHz）已經涵蓋全部，往上 resample 到 44100 只是內插、不增不減資訊。
+  `inference/` 的工具會自動把任意取樣率轉成 44100；瀏覽器 demo 也是先讓 Web Audio 重採樣再處理。
 - 語言：`--wake-word` 含中日韓字元 → 中文路線，否則英文路線；其他語言未測試。
 
 ### 實證
@@ -530,7 +533,8 @@ the topology, independent of the processor / accelerator (only wall-clock time v
 | Trainable parameters | **22,530** (~22k) |
 | Model file | fully INT8-quantised `.tflite`, **~47 KB** (with BN folded into the convs, weights ~21 KB) |
 | Runtime memory | ~21 KB resident weights + one (25×5×64) INT8 activation buffer (~8 KB); no dynamic allocation |
-| Input | mono PCM, **44100 Hz**, **exactly 1.0 s** (44100 samples; zero-padded if short, truncated if long) |
+| Input | mono PCM; the pipeline works internally at **44100 Hz**, **exactly 1.0 s** (44100 samples; zero-padded if short, truncated if long) |
+| Usable band | the mel filterbank only spans **20–8000 Hz** → any microphone at ≥ 16 kHz already carries everything the model uses |
 | Feature | MFCC-10 → tensor **(49, 10, 1)** (20 ms hop, 1024-pt FFT, 40 mel, per-utterance CMVN) |
 | Output | 2-class softmax `[not-keyword, keyword]` |
 | Decision | `keyword score ≥ threshold` (default 0.5, see *Threshold*) |
@@ -547,8 +551,10 @@ the topology, independent of the processor / accelerator (only wall-clock time v
   is what a keyword trigger should do, but it also can't reject a deliberate impersonation).
 - **Not speech recognition:** it only answers "did this 1 second contain the phrase" — no
   transcription, no timing of where the word occurred.
-- Input must be 44100 Hz; resample first if your capture device runs at another rate (the
-  `inference/` tools do this automatically).
+- Sample rate: the pipeline fixes on 44100 Hz internally, but that is not a capture requirement —
+  the model only looks at 20–8000 Hz, so a 16 kHz mic (8 kHz Nyquist) already covers all of it,
+  and upsampling to 44100 is pure interpolation, adding and losing nothing. The `inference/` tools
+  resample any rate to 44100 automatically; the browser demo lets Web Audio resample first too.
 - Language: `--wake-word` containing CJK characters → Chinese path, otherwise English path;
   other languages are untested.
 
