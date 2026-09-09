@@ -20,11 +20,12 @@
 按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
 （權重直接內嵌），不上傳、不連線、不用後端。
 
-<!-- 示範影片：在 GitHub 網頁按這個檔案右上角的鉛筆編輯，把 .mp4 直接拖進編輯框，
-     GitHub 會自動上傳並在游標處插入影片；插到下面這行的位置即可。 -->
-
 
 https://github.com/user-attachments/assets/858a5420-ea49-4900-aabf-1ad07df24d7f
+
+
+
+https://github.com/user-attachments/assets/7630a169-1da3-4721-ad8a-94ae9ce29888
 
 
 
@@ -400,8 +401,14 @@ keyword → press "start listening" → talk to your mic.** The page runs the ex
 47&nbsp;KB model in your browser with JavaScript (weights embedded inline) — nothing uploaded,
 no network, no backend.
 
-<!-- Demo video: edit this file on github.com (pencil icon), drag an .mp4 into the editor —
-     GitHub uploads it and inserts the clip at the cursor; drop it around here. -->
+
+https://github.com/user-attachments/assets/cbc5b553-eaba-4974-8d30-666d7d155212
+
+
+
+https://github.com/user-attachments/assets/794b0e38-d31e-471b-8b29-145d93f02a7d
+
+
 
 **Preview locally / deploy your own copy**
 
