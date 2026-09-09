@@ -18,14 +18,7 @@
 
 **打開 [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → 選喚醒詞 →
 按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
-（權重直接內嵌），不上傳、不連線、不用後端。
-
-<table>
-<tr>
-<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
-<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
-</tr>
-</table>
+（權重直接內嵌），不上傳、不連線、不用後端。頁面最上方有**兩段示範影片自動輪播**。
 
 **本機預覽 / 自己部署一份**
 
@@ -397,14 +390,7 @@ Chinese and English both supported.**
 **Open [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → pick a
 keyword → press "start listening" → talk to your mic.** The page runs the exact same trained
 47&nbsp;KB model in your browser with JavaScript (weights embedded inline) — nothing uploaded,
-no network, no backend. 
-
-<table>
-<tr>
-<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
-<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
-</tr>
-</table>
+no network, no backend. **Two demo clips auto-rotate at the top of that page.**
 
 **Preview locally / deploy your own copy**
 

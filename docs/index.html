@@ -40,13 +40,28 @@
     background:var(--bg); color:var(--ink);
     font-family:"IBM Plex Sans",system-ui,-apple-system,"Noto Sans TC",sans-serif;
     line-height:1.55; -webkit-font-smoothing:antialiased;
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    padding:32px 18px;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:16px; padding:32px 18px;
   }
   .card{
     width:100%; max-width:468px; background:var(--surface); border:1px solid var(--line);
     border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 26px 22px;
   }
+
+  /* demo reel */
+  .reel{
+    width:100%; max-width:468px; background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+  }
+  .reel video{ display:block; width:100%; aspect-ratio:16/9; background:#000; object-fit:contain; }
+  .reel-bar{ display:flex; align-items:center; justify-content:space-between; padding:8px 13px 9px; }
+  .reel-cap{ font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .reel-dots{ display:flex; gap:6px; }
+  .reel-dots button{
+    width:7px; height:7px; padding:0; border:0; border-radius:50%;
+    background:var(--line); cursor:pointer; transition:background .15s;
+  }
+  .reel-dots button[aria-current="true"]{ background:var(--accent); }
   header h1{
     font-size:19px; font-weight:600; margin:0; letter-spacing:-.01em; text-wrap:balance;
   }
@@ -136,6 +151,16 @@
 </style>
 </head>
 <body>
+<div class="reel" aria-label="示範影片">
+  <video id="reelv" playsinline muted preload="metadata" controls></video>
+  <div class="reel-bar">
+    <span class="reel-cap">示範</span>
+    <span class="reel-dots">
+      <button type="button" data-i="0" aria-label="示範影片 1" aria-current="true"></button>
+      <button type="button" data-i="1" aria-label="示範影片 2" aria-current="false"></button>
+    </span>
+  </div>
+</div>
 <div class="card">
   <header>
     <h1>喚醒詞偵測器</h1>
@@ -483,6 +508,26 @@ const DATA = {"sr":44100,"fft":1024,"hop":882,"n_mel":40,"n_mfcc":10,"frames":49
   draw();
   addEventListener('resize',draw);
   matchMedia('(prefers-color-scheme:dark)').addEventListener?.('change',draw);
+
+  // ---- demo reel: 兩段影片自動輪播 ----
+  (function(){
+    const rv=document.getElementById('reelv');
+    if(!rv) return;
+    const clips=['demo-1.mp4','demo-2.mp4'];
+    const dots=[...document.querySelectorAll('.reel-dots button')];
+    let ci=0, held=false;
+    function show(i){
+      ci=(i%clips.length+clips.length)%clips.length;
+      dots.forEach((d,k)=>d.setAttribute('aria-current', k===ci?'true':'false'));
+      rv.src=clips[ci]; rv.load(); rv.play().catch(()=>{});
+    }
+    rv.addEventListener('ended',()=>{ if(!held) show(ci+1); });
+    rv.addEventListener('error',()=>{ if(!held && clips.length>1) show(ci+1); });
+    rv.addEventListener('pause',()=>{ if(!rv.ended && !rv.seeking) held=true; });
+    rv.addEventListener('play',()=>{ held=false; });
+    dots.forEach(d=>d.addEventListener('click',()=>{ held=false; show(+d.dataset.i); }));
+    show(0);
+  })();
 })();
 </script>
 </body>
