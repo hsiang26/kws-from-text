@@ -20,6 +20,11 @@
 按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
 （權重直接內嵌），不上傳、不連線、不用後端。頁面最上方有**兩段示範影片自動輪播**。
 
+
+https://github.com/user-attachments/assets/858a5420-ea49-4900-aabf-1ad07df24d7f
+
+
+
 **本機預覽 / 自己部署一份**
 
 - **本機預覽**：`python -m http.server 8000 --directory docs`，再開 `http://localhost:8000`
