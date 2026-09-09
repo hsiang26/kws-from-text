@@ -88,7 +88,7 @@ def parse_args():
     # edge-tts positives are anechoic (close-mic, no room). A word spoken
     # ~0.5 m from a mic in a real cabin/room arrives with a reverberant tail
     # + a raised noise floor once level-normalised, which the model scores
-    # low (the pos_real "girl"/"pinhong" clips: quiet + 300-425 ms decay).
+    # low (matches what real close-talk recordings show: quiet + 300-425 ms decay).
     # Convolving a fraction of training clips with a synthetic room impulse
     # response teaches it to tolerate that. t60 = -60 dB reverb time (car
     # cabin ~0.05-0.15 s, small room ~0.3-0.6 s); mix = dry/wet ratio.

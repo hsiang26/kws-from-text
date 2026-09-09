@@ -23,17 +23,17 @@ Settings → Pages 啟用。）
 
 <table>
 <tr>
-<td width="50%"><video src="docs/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
-<td width="50%"><video src="docs/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
 </tr>
 </table>
 
-<details><summary>本機預覽 / 自己部署一份</summary>
+**本機預覽 / 自己部署一份**
 
 - **本機預覽**：`python -m http.server 8000 --directory docs`，再開 `http://localhost:8000`
-- **部署到你自己的 GitHub Pages**（fork 之後）：Settings → Pages → Source 選 `Deploy from a branch`、
-  資料夾 `/docs` → 幾分鐘後在 `https://<你的帳號>.github.io/<repo>/`
-</details>
+- **啟用線上 demo**（repo 擁有者）：repo 設為 public → Settings → Pages → Source 選
+  `Deploy from a branch`、branch `main`、資料夾 `/docs` → 幾分鐘後在
+  `https://<你的帳號>.github.io/<repo>/`（GitHub 免費方案的 Pages 需要 repo 是公開的）
 
 > 麥克風需要 **HTTPS 或 localhost**（瀏覽器 secure-context 規定）；GitHub Pages 是 HTTPS，直接雙擊
 > `file://` 開則拿不到。建議用 Chrome / Edge。按「開始聆聽」後若沒反應，頁面會在 2 秒後顯示診斷
@@ -403,17 +403,17 @@ Settings → Pages first.)
 
 <table>
 <tr>
-<td width="50%"><video src="docs/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
-<td width="50%"><video src="docs/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="https://hsiang26.github.io/kws-from-text/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
 </tr>
 </table>
 
-<details><summary>Preview locally / deploy your own copy</summary>
+**Preview locally / deploy your own copy**
 
 - **Preview locally:** `python -m http.server 8000 --directory docs`, then open `http://localhost:8000`
-- **Deploy to your own GitHub Pages** (after forking): Settings → Pages → Source `Deploy from a
-  branch`, folder `/docs` → live at `https://<your-account>.github.io/<repo>/` in a few minutes
-</details>
+- **Enable the live demo** (repo owner): make the repo public → Settings → Pages → Source
+  `Deploy from a branch`, branch `main`, folder `/docs` → live at
+  `https://<your-account>.github.io/<repo>/` (GitHub's free Pages needs a public repo)
 
 > The mic needs **HTTPS or localhost** (browser secure-context rule); GitHub Pages is HTTPS,
 > opening `file://` directly won't get mic access. Chrome / Edge recommended. If nothing happens
