@@ -18,8 +18,7 @@
 
 **打開 [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → 選喚醒詞 →
 按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
-（權重直接內嵌），不上傳、不連線、不用後端。（頁面由 GitHub Pages 提供，repo 擁有者需先在
-Settings → Pages 啟用。）
+（權重直接內嵌），不上傳、不連線、不用後端。
 
 <table>
 <tr>
@@ -398,8 +397,7 @@ Chinese and English both supported.**
 **Open [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → pick a
 keyword → press "start listening" → talk to your mic.** The page runs the exact same trained
 47&nbsp;KB model in your browser with JavaScript (weights embedded inline) — nothing uploaded,
-no network, no backend. (Served by GitHub Pages; the repo owner has to enable it under
-Settings → Pages first.)
+no network, no backend. 
 
 <table>
 <tr>
