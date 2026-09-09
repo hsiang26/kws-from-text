@@ -16,21 +16,29 @@
 
 ## 線上試玩
 
-`docs/index.html` 是一個**單檔、純前端**的 demo：用 JavaScript 跑訓練好的同一個 47&nbsp;KB 模型
-（權重直接內嵌），開麥克風即時偵測「hey assistant」和「小幫手」—— 不上傳、不連線、不用後端。
+**打開 [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → 選喚醒詞 →
+按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
+（權重直接內嵌），不上傳、不連線、不用後端。（頁面由 GitHub Pages 提供，repo 擁有者需先在
+Settings → Pages 啟用。）
 
-<!-- DEMO 影片：把螢幕錄影拖進任一個 GitHub issue／PR 留言框，GitHub 會生成一個
-     https://github.com/user-attachments/assets/... 連結，把下面這行換成該連結即可（GitHub 會自動內嵌播放器）。 -->
-> **DEMO 影片**：_（待補）_
+<table>
+<tr>
+<td width="50%"><video src="docs/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="docs/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
+</tr>
+</table>
 
-- **部署**：push 上 GitHub → Settings → Pages → Source 選 `Deploy from a branch`、資料夾 `/docs`
-  → 幾分鐘後在 `https://<你的帳號>.github.io/<repo>/` 就有了。
-- **本機先看**：`cd docs && python -m http.server 8000`，開 `http://localhost:8000`。
+<details><summary>本機預覽 / 自己部署一份</summary>
 
-> 麥克風需要 **HTTPS 或 localhost**（瀏覽器的 secure-context 規定）。GitHub Pages 是 HTTPS，
-> 直接雙擊 `file://` 開則拿不到麥克風。建議用 Chrome / Edge。按「開始聆聽」後若沒反應，
-> 頁面會在 2 秒後顯示診斷（收到幾個音框、音量峰值、選到哪個輸入裝置）—— 峰值是 0 通常是
-> Windows 隱私權設定擋住桌面應用程式、或麥克風被其他程式（Discord 等）占用。
+- **本機預覽**：`python -m http.server 8000 --directory docs`，再開 `http://localhost:8000`
+- **部署到你自己的 GitHub Pages**（fork 之後）：Settings → Pages → Source 選 `Deploy from a branch`、
+  資料夾 `/docs` → 幾分鐘後在 `https://<你的帳號>.github.io/<repo>/`
+</details>
+
+> 麥克風需要 **HTTPS 或 localhost**（瀏覽器 secure-context 規定）；GitHub Pages 是 HTTPS，直接雙擊
+> `file://` 開則拿不到。建議用 Chrome / Edge。按「開始聆聽」後若沒反應，頁面會在 2 秒後顯示診斷
+> （收到幾個音框、音量峰值、選到哪個輸入裝置）—— 峰值是 0 通常是 Windows 隱私權設定擋掉桌面
+> 應用程式、或麥克風被其他程式（Discord 等）占用。
 
 ---
 
@@ -40,7 +48,8 @@
 生成 ~28000 筆 TTS 樣本 + 訓練）。GPU 非必要（有 NVIDIA 卡可大幅加速，見〈GPU 加速生成〉）。
 
 ```bash
-git clone https://github.com/hsiang26/kws-from-text.git && cd kws-from-text
+git clone https://github.com/hsiang26/kws-from-text.git
+cd kws-from-text
 python run_all.py --wake-word "hey assistant"
 ```
 
@@ -168,9 +177,11 @@ Microcontrollers*（Zhang et al. 2017, arXiv:1711.07128）：
   最穩的是 **2–4 個中文字 / 1–3 個英文單字**；只有單一個音節則太短、線索不足、容易誤觸發。
 - **非語者相關**：不做聲紋 / 語者註冊，任何人講都會觸發（喚醒詞本來就該這樣，但也擋不掉刻意模仿）。
 - **不是語音辨識**：只回答「這 1 秒內有沒有出現這個詞」，不轉寫、不定位詞出現的時間點。
-- 取樣率：pipeline 內部固定用 44100 Hz，但這不是收音需求 —— 模型只看 20–8000 Hz，所以 16 kHz
-  的麥克風（Nyquist 8 kHz）已經涵蓋全部，往上 resample 到 44100 只是內插、不增不減資訊。
-  `inference/` 的工具會自動把任意取樣率轉成 44100；瀏覽器 demo 也是先讓 Web Audio 重採樣再處理。
+- 取樣率：pipeline 內部固定用 44100 Hz，但這不是收音需求。**低於 44100 Hz 的音訊照樣能用** ——
+  模型只看 20–8000 Hz，只要麥克風 ≥ 16 kHz（Nyquist ≥ 8 kHz）就已涵蓋這個頻帶，系統自動升採樣到
+  44100 只是內插、不增不減模型看的資訊。`inference/` 的工具會把任意取樣率轉成 44100；瀏覽器 demo
+  也是先讓 Web Audio 重採樣再處理。（真的低於 16 kHz，例如 8 kHz 電話音質，才會少掉 4–8 kHz 那段、
+  準確率下降。）
 - 語言：`--wake-word` 含中日韓字元 → 中文路線，否則英文路線；其他語言未測試。
 
 ### 實證
@@ -384,24 +395,31 @@ Chinese and English both supported.**
 
 ## Live demo
 
-`docs/index.html` is a **single-file, front-end-only** demo: JavaScript runs the exact same
-trained 47&nbsp;KB model (weights embedded inline) and detects "hey assistant" and "小幫手"
-from the mic in real time — nothing uploaded, no network, no backend.
+**Open [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → pick a
+keyword → press "start listening" → talk to your mic.** The page runs the exact same trained
+47&nbsp;KB model in your browser with JavaScript (weights embedded inline) — nothing uploaded,
+no network, no backend. (Served by GitHub Pages; the repo owner has to enable it under
+Settings → Pages first.)
 
-<!-- DEMO video: drag a screen recording into any GitHub issue/PR comment box; GitHub returns a
-     https://github.com/user-attachments/assets/... link. Replace the line below with that link
-     (GitHub auto-embeds a player). -->
-> **Demo video:** _(coming soon)_
+<table>
+<tr>
+<td width="50%"><video src="docs/demo-1.mp4" autoplay loop muted playsinline controls></video></td>
+<td width="50%"><video src="docs/demo-2.mp4" autoplay loop muted playsinline controls></video></td>
+</tr>
+</table>
 
-- **Deploy:** push to GitHub → Settings → Pages → Source `Deploy from a branch`, folder `/docs`
-  → live at `https://<your-account>.github.io/<repo>/` in a few minutes.
-- **Preview locally:** `cd docs && python -m http.server 8000`, open `http://localhost:8000`.
+<details><summary>Preview locally / deploy your own copy</summary>
 
-> The mic needs **HTTPS or localhost** (browser secure-context rule). GitHub Pages is HTTPS;
-> opening the file directly via `file://` won't get mic access. Chrome / Edge recommended. If
-> nothing happens after you press "start listening", the page shows a diagnostic after 2&nbsp;s
-> (blocks received, peak level, which input device was picked) — a peak of 0 is usually the
-> Windows privacy setting blocking desktop apps, or another app (Discord, etc.) holding the mic.
+- **Preview locally:** `python -m http.server 8000 --directory docs`, then open `http://localhost:8000`
+- **Deploy to your own GitHub Pages** (after forking): Settings → Pages → Source `Deploy from a
+  branch`, folder `/docs` → live at `https://<your-account>.github.io/<repo>/` in a few minutes
+</details>
+
+> The mic needs **HTTPS or localhost** (browser secure-context rule); GitHub Pages is HTTPS,
+> opening `file://` directly won't get mic access. Chrome / Edge recommended. If nothing happens
+> after you press "start listening", the page shows a diagnostic after 2&nbsp;s (blocks received,
+> peak level, which input device was picked) — a peak of 0 is usually the Windows privacy setting
+> blocking desktop apps, or another app (Discord, etc.) holding the mic.
 
 ---
 
@@ -412,7 +430,8 @@ from the mic in real time — nothing uploaded, no network, no backend.
 a lot — see *GPU-accelerated generation*).
 
 ```bash
-git clone https://github.com/hsiang26/kws-from-text.git && cd kws-from-text
+git clone https://github.com/hsiang26/kws-from-text.git
+cd kws-from-text
 python run_all.py --wake-word "hey assistant"
 ```
 
@@ -551,10 +570,12 @@ the topology, independent of the processor / accelerator (only wall-clock time v
   is what a keyword trigger should do, but it also can't reject a deliberate impersonation).
 - **Not speech recognition:** it only answers "did this 1 second contain the phrase" — no
   transcription, no timing of where the word occurred.
-- Sample rate: the pipeline fixes on 44100 Hz internally, but that is not a capture requirement —
-  the model only looks at 20–8000 Hz, so a 16 kHz mic (8 kHz Nyquist) already covers all of it,
-  and upsampling to 44100 is pure interpolation, adding and losing nothing. The `inference/` tools
-  resample any rate to 44100 automatically; the browser demo lets Web Audio resample first too.
+- Sample rate: the pipeline fixes on 44100 Hz internally, but that is not a capture requirement.
+  **Audio below 44100 Hz works just as well** — the model only looks at 20–8000 Hz, so any mic at
+  ≥ 16 kHz (Nyquist ≥ 8 kHz) already covers that band, and upsampling to 44100 is pure
+  interpolation that adds and loses nothing the model sees. The `inference/` tools resample any
+  rate to 44100 automatically; the browser demo lets Web Audio resample first too. (Genuinely
+  below 16 kHz — e.g. 8 kHz telephone audio — you do lose the 4–8 kHz band and accuracy drops.)
 - Language: `--wake-word` containing CJK characters → Chinese path, otherwise English path;
   other languages are untested.
 
