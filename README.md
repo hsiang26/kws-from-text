@@ -212,7 +212,7 @@ python run_all.py --wake-word "hey assistant" --piper-engine torch
 
 `hey_assistant` 範例模型，對一組 **225 筆**測試集（25 正 / 200 負）在兩個門檻下的表現。
 正樣本分「真人錄音」與「TTS 合成」；負樣本分「真人念的近音詞」「TTS 合成的近音詞」
-「一般語音（Google Speech Commands）」。
+「一般語音」（取自 [Hey Snips](https://arxiv.org/abs/1811.07684) 研究資料集的負樣本，人講的隨機句子）。
 
 **門檻 0.5（預設）**
 
@@ -258,6 +258,10 @@ python run_all.py --wake-word "hey assistant" --piper-engine torch
 4. **真人錄音的喚醒詞在兩個門檻下都是最弱的一組**（0.5 約 58 %、0.9 約 33 %），TTS 合成的則 100 %。
    原因單純：範例模型 100 % 用合成語音訓練，沒聽過真人的音色、口氣、遠場與環境，合成語音的分布
    跟真人有落差。這是「零錄音」訓練換來的取捨。
+
+> 這組測試集含真人錄音與 Hey Snips 研究資料集的片段（授權不允許轉散布），**不隨 repo 附上**。
+> 想自己回測：準備一份 `labels.csv`（欄位 `relative_path,label,category`）+ 音檔，跑
+> `python inference/infer.py --model models/examples/hey_assistant --labels-csv <你的>.csv`。
 
 ---
 
@@ -610,7 +614,8 @@ Or set `PIPER_ENGINE = "torch"` in `config.py`.
 
 The `hey_assistant` example model on a **225-sample** test set (25 positive / 200 negative) at
 two thresholds. Positives split into "real human recording" and "TTS synthesis"; negatives into
-"human-spoken near-miss", "TTS near-miss" and "generic speech (Google Speech Commands)".
+"human-spoken near-miss", "TTS near-miss" and "generic speech" (negatives from the
+[Hey Snips](https://arxiv.org/abs/1811.07684) research dataset — random human sentences).
 
 **Threshold 0.5 (default)**
 
@@ -661,6 +666,11 @@ two thresholds. Positives split into "real human recording" and "TTS synthesis";
    on synthetic speech and has never heard a real human's timbre, delivery, far-field or room —
    synthetic speech is distributed differently from real speech. That is the trade-off of
    zero-recording training.
+
+> This test set contains human recordings and clips from the Hey Snips research dataset
+> (its license forbids redistribution), so it is **not shipped with the repo**. To run your own
+> backtest: build a `labels.csv` (columns `relative_path,label,category`) plus audio and run
+> `python inference/infer.py --model models/examples/hey_assistant --labels-csv <yours>.csv`.
 
 ---
 
