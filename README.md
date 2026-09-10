@@ -1,8 +1,8 @@
 <a id="chinese"></a>
 
-# kws-from-text —— 自訂中英文關鍵詞偵測（keyword spotting）模型
+# tiny-keyword-spotting —— 自訂中英文喚醒詞模型（keyword spotting）
 
-**打一句關鍵詞，就能訓練出你專屬的語音喚醒模型。不用錄音、不用標註，中英文都支援。**
+**打一句喚醒詞，就能訓練出你專屬的語音喚醒模型。不用錄音、不用標註，中英文都支援。**
 
 - **只給一句話**：輸入「小幫手」或「hey assistant」，不用自己錄音、不用找人標註
 - **中英文都行**：中文用真人級 Mandarin 語音、英文用 900+ 語者的語音自動合成訓練資料
@@ -16,7 +16,7 @@
 
 ## 線上試玩
 
-**打開 [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → 選喚醒詞 →
+**打開 [hsiang26.github.io/tiny-keyword-spotting](https://hsiang26.github.io/tiny-keyword-spotting/) → 選喚醒詞 →
 按「開始聆聽」→ 對著麥克風說。** 頁面用 JavaScript 在你瀏覽器裡跑訓練好的同一個 47&nbsp;KB 模型
 （權重直接內嵌），不上傳、不連線、不用後端。
 
@@ -49,8 +49,8 @@ https://github.com/user-attachments/assets/7630a169-1da3-4721-ad8a-94ae9ce29888
 生成 ~28000 筆 TTS 樣本 + 訓練）。GPU 非必要（有 NVIDIA 卡可大幅加速，見〈GPU 加速生成〉）。
 
 ```bash
-git clone https://github.com/hsiang26/kws-from-text.git
-cd kws-from-text
+git clone https://github.com/hsiang26/tiny-keyword-spotting.git
+cd tiny-keyword-spotting
 python run_all.py --wake-word "hey assistant"
 ```
 
@@ -331,7 +331,7 @@ docs/index.html         純瀏覽器 web demo（GitHub Pages）
 `piper-tts`（及可選的 `edge-tts`、Piper 內含的 espeak-ng）都是 GPL-3.0。
 
 ```
-kws-from-text — 自訂中英文關鍵詞偵測模型
+tiny-keyword-spotting — 自訂中英文喚醒詞模型
 Copyright (C) 2026 Jerome Hsiang
 
 This program is free software: you can redistribute it and/or modify it under
@@ -379,10 +379,10 @@ repo 本身**不含**這些資料集的音檔；`datasets/prepare.py` 才會從�
 
 <a id="english"></a>
 
-# kws-from-text — Custom Chinese / English Keyword-Spotting Models
+# tiny-keyword-spotting — Custom English / Chinese wake-word models (keyword spotting)
 
-**Type one keyword and train your own voice keyword-spotting model. No recording, no labelling —
-Chinese and English both supported.**
+**Type one phrase and train your own wake-word model. No recording, no labelling —
+English and Chinese both supported.**
 
 - **Just one phrase:** type "小幫手" or "hey assistant" — record nothing, label nothing
 - **Chinese and English:** Mandarin from a natural-sounding TTS, English from 900+ TTS speakers, all synthesised for you
@@ -396,8 +396,8 @@ Chinese and English both supported.**
 
 ## Live demo
 
-**Open [hsiang26.github.io/kws-from-text](https://hsiang26.github.io/kws-from-text/) → pick a
-keyword → press "start listening" → talk to your mic.** The page runs the exact same trained
+**Open [hsiang26.github.io/tiny-keyword-spotting](https://hsiang26.github.io/tiny-keyword-spotting/) → pick a
+wake word → press "start listening" → talk to your mic.** The page runs the exact same trained
 47&nbsp;KB model in your browser with JavaScript (weights embedded inline) — nothing uploaded,
 no network, no backend.
 
@@ -432,8 +432,8 @@ https://github.com/user-attachments/assets/794b0e38-d31e-471b-8b29-145d93f02a7d
 a lot — see *GPU-accelerated generation*).
 
 ```bash
-git clone https://github.com/hsiang26/kws-from-text.git
-cd kws-from-text
+git clone https://github.com/hsiang26/tiny-keyword-spotting.git
+cd tiny-keyword-spotting
 python run_all.py --wake-word "hey assistant"
 ```
 
@@ -444,7 +444,7 @@ python run_all.py --wake-word "hey assistant"
 | File | Purpose |
 |---|---|
 | `model_int8.tflite` | INT8-quantised model (~47 KB) |
-| `metadata.json` | everything inference needs: sample rate, feature params, quant scale/zero-point, positive-class index, suggested threshold, keyword |
+| `metadata.json` | everything inference needs: sample rate, feature params, quant scale/zero-point, positive-class index, suggested threshold, wake word |
 | `training_report.txt` | this run's config, data mix, training curves, evaluation |
 | `best.keras` | best checkpoint during training (float) |
 | `test_mix_audio/` | test mixdown samples pre-generated before training |
@@ -480,14 +480,14 @@ The model parameters (features, network, negative-pool ratios, augmentation) **a
 tuned, with measurements to back it** (see *Measurements & analysis*) — use them as-is. **The
 only thing you adjust per scenario is the decision threshold `--threshold`, default `0.5`.**
 
-Output is a 2-class softmax; the threshold is "how high must the keyword score be to count".
-The score distribution is bimodal (true keyword ≈ 0.99, everything else ≈ 0), so the default
+Output is a 2-class softmax; the threshold is "how high must the wake-word score be to count".
+The score distribution is bimodal (true wake word ≈ 0.99, everything else ≈ 0), so the default
 0.5 is enough for most cases:
 
 | Threshold | Good for | Trade-off |
 |---|---|---|
 | **0.5** (default) | consumer applications: smart appliances, desktop / app assistants, interactive devices. The user speaks naturally and casually and it wakes — the smoothest experience | very occasionally triggered by a phrase that sounds almost identical |
-| **0.9** | scenarios where a false trigger is costly: in-car / hands-free industrial gear, always-on battery devices, or when the keyword is close to everyday phrasing and needs hard separation | the user has to say the whole keyword clearly and completely for it to wake |
+| **0.9** | scenarios where a false trigger is costly: in-car / hands-free industrial gear, always-on battery devices, or when the wake word is close to everyday phrasing and needs hard separation | the user has to say the whole wake word clearly and completely for it to wake |
 
 `inference/*.py` defaults to `suggested_threshold` (0.5) from `metadata.json`; `--threshold 0.9` overrides.
 
@@ -500,11 +500,11 @@ near-miss negatives ④ create run dir ⑤ train + export.
 
 **Sample generation** (`kws/generate.py` + `kws/tts/`) —
 
-- **English keyword** → **Piper** `en_US-libritts_r-medium` (LibriTTS-R VITS, **904
+- **English wake word** → **Piper** `en_US-libritts_r-medium` (LibriTTS-R VITS, **904
   speakers**); each sample draws a random speaker + random rate / prosody + sentence-final
   punctuation, then librosa time-stretch / pitch-shift afterwards. ONNX, CPU, offline by default.
-- **Chinese keyword** → positives use **edge-tts** (real Mandarin, `zh-tw` voices);
-  near-miss negatives use Piper (partial phrases of the keyword transliterated to pinyin,
+- **Chinese wake word** → positives use **edge-tts** (real Mandarin, `zh-tw` voices);
+  near-miss negatives use Piper (partial phrases of the wake word transliterated to pinyin,
   `小幫手` → `xiao` / `bang shou` …).
 
 At training time `kws/train.py` mixes in noise / FMA music (SNR 4–20 dB), reverb and low-pass
@@ -514,7 +514,7 @@ itself, so generation here emits clean samples.
 
 | Pool | Content | Generated by | Default ratio |
 |---|---|---|---|
-| `near_miss` | keyword near-homophones / partial words (`say assistant` / `hey resistant` / `insistent` …) | `kws/generate.py`, per keyword | 0.25 |
+| `near_miss` | wake-word near-homophones / partial words (`say assistant` / `hey resistant` / `insistent` …) | `kws/generate.py`, per wake word | 0.25 |
 | `generic` | generic English words / short phrases (numbers, weekdays, assistant commands, everyday talk) | `kws.generate --kind generic`, **generated once**, shared | 0.25 |
 | `gsc` | Google Speech Commands single words | `datasets/prepare.py` | 0.20 |
 | `fma` | FMA music | `datasets/prepare.py` | 0.10 |
@@ -540,7 +540,7 @@ input MFCC (49, 10, 1)
   4x |  DepthwiseConv2D (3x3)            + BN + ReLU
      |  Conv2D  64 @ (1x1)               + BN + ReLU         -> (25, 5, 64)
   GlobalAveragePooling                                       -> (64,)
-  Dense 2 + softmax                                          -> [not-keyword, keyword]
+  Dense 2 + softmax                                          -> [not-wake-word, wake-word]
 ```
 
 Depthwise-separable convolution cuts each block's compute to about 1/8 of a standard 3×3 conv.
@@ -557,15 +557,15 @@ the topology, independent of the processor / accelerator (only wall-clock time v
 | Input | mono PCM; the pipeline works internally at **44100 Hz**, **exactly 1.0 s** (44100 samples; zero-padded if short, truncated if long) |
 | Usable band | the mel filterbank only spans **20–8000 Hz** → any microphone at ≥ 16 kHz already carries everything the model uses |
 | Feature | MFCC-10 → tensor **(49, 10, 1)** (20 ms hop, 1024-pt FFT, 40 mel, per-utterance CMVN) |
-| Output | 2-class softmax `[not-keyword, keyword]` |
-| Decision | `keyword score ≥ threshold` (default 0.5, see *Threshold*) |
+| Output | 2-class softmax `[not-wake-word, wake-word]` |
+| Decision | `wake-word score ≥ threshold` (default 0.5, see *Threshold*) |
 | Streaming use | 1-second sliding window, one inference every ~100–120 ms (see `inference/mic_demo.py`) |
 | Quantisation target | weights + activations all INT8 — drops onto [TFLite Micro](https://github.com/tensorflow/tflite-micro) / CMSIS-NN / NPUs, no FPU needed |
 
 ### Constraints & characteristics
 
-- **One model detects one keyword.** For several keywords, train several models and run them in parallel.
-- **Keyword length: the whole phrase must fit comfortably in ~1 second.** The model only sees a
+- **One model detects one wake word.** For several wake words, train several models and run them in parallel.
+- **Wake-word length: the whole phrase must fit comfortably in ~1 second.** The model only sees a
   1.0 s audio window; a longer phrase gets its tail cut off. Most reliable is **2–4 Chinese
   characters / 1–3 English words**; a single syllable is too short — too few cues, easy to false-trigger.
 - **Not speaker-specific:** no voiceprint / speaker enrolment, anyone's voice triggers it (that
@@ -643,20 +643,20 @@ two thresholds. Positives split into "real human recording" and "TTS synthesis";
 **How to read this**
 
 1. **TTS samples and generic speech: near-perfect at both thresholds.** The model has no trouble
-   judging "does this sound like the keyword".
-2. **Threshold 0.5 (default) → smoothest experience.** Recall on human-spoken keywords rises
+   judging "does this sound like the wake word".
+2. **Threshold 0.5 (default) → smoothest experience.** Recall on human-spoken wake words rises
    from 33 % (at 0.9) to ~58 %; the user doesn't have to enunciate carefully — speaking
    naturally and casually wakes it, which is the right trade-off for consumer applications
    (smart appliances, desktop / app assistants). The cost is small: 7 false triggers out of 200
    negatives, 6 of them human-spoken very-close near-misses ("hey sister" and similar), with
    zero false triggers on the 100 everyday-speech clips.
 3. **Threshold 0.9 → strict, almost no false triggers.** Only 2 of 200 negatives slip through,
-   but the user must enunciate the whole keyword clearly — a mumbled pass won't wake it. Good for:
+   but the user must enunciate the whole wake word clearly — a mumbled pass won't wake it. Good for:
    - in-car / hands-free industrial gear (a false trigger means a wrong action)
    - always-on battery devices (every false wake drains power)
-   - a keyword that is close to everyday phrasing and needs hard separation (e.g. keeping
+   - a wake word that is close to everyday phrasing and needs hard separation (e.g. keeping
      "hey assistant" from firing on a throwaway "hey sister" / "hey listen")
-4. **Human-recorded keywords are the weakest group at both thresholds** (~58 % at 0.5, ~33 %
+4. **Human-recorded wake words are the weakest group at both thresholds** (~58 % at 0.5, ~33 %
    at 0.9), while TTS ones are 100 %. The reason is simple: this example model was trained 100 %
    on synthetic speech and has never heard a real human's timbre, delivery, far-field or room —
    synthetic speech is distributed differently from real speech. That is the trade-off of
@@ -701,7 +701,7 @@ datasets/              (contents .gitignored; fetched by prepare.py)
   prepare.py             download GSC + FMA + Piper model, generate noise / generic pools
   make_noise.py          numpy-synthesised ambient noise
   speech_commands/  music/  noise/  generic_speech/     negative pools
-  tts/<label>/           per-keyword positive/ + negative/ (near-miss)
+  tts/<label>/           per-wake-word positive/ + negative/ (near-miss)
   _models/piper/         Piper model
 
 models/
@@ -736,7 +736,7 @@ Released under **GPL-3.0-or-later** (`LICENSE` has the full text). Why GPL: the 
 engine `piper-tts` (and the optional `edge-tts`, and espeak-ng bundled with Piper) are all GPL-3.0.
 
 ```
-kws-from-text — Custom Chinese / English Keyword-Spotting Models
+tiny-keyword-spotting — Custom English / Chinese wake-word models (keyword spotting)
 Copyright (C) 2026 Jerome Hsiang
 
 This program is free software: you can redistribute it and/or modify it under
